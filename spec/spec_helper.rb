@@ -11,3 +11,11 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 end
+
+require 'rspec/expectations'
+
+RSpec::Matchers.define :have_a_price_of do |expected|
+  match do |actual|
+    actual.price == expected
+  end
+end
