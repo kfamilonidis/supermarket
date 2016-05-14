@@ -6,14 +6,24 @@ describe Supermarket do
 
   describe Supermarket::Till do
     
+    let(:empty_basket) { Supermarket::Basket.new }
+    let(:item) { Supermarket::Item.new(name: 'Apples',price: 50) }
+
   	it 'should charge nothing for no items' do
- 	  	expect(subject.checkout).to eq(0)
+ 	  	expect(subject.checkout(empty_basket)).to eq(0)
+	  end
+
+		it 'should charge nothing for no items' do
+			one_item_basket = empty_basket.add(item)
+ 	  	expect(subject.checkout(one_item_basket)).to eq(50)
 	  end
 
   end
 
   describe Supermarket::Item do
     
+  	subject { described_class.new(name: 'Foo', price: 0) }
+
   	it 'should have a price' do
  	  	expect(subject).to respond_to(:price)
 	  end
@@ -23,16 +33,15 @@ describe Supermarket do
   end
 
   describe Supermarket::Stocker do
-    
+
     it 'should scan item into the inventory' do
-    	
-    	# expect(subject).to matcher
+    	# expect(subject.scan).to matcher
     end
   end
 
   describe Supermarket::Inventory do 
 
-  	let(:item){ Supermarket::Item.new}
+  	let(:item){ Supermarket::Item.new(name: 'Foo', price: 0)}
 
   	it 'tells how many items has of a kind' do
   		expect(subject.how_many?(item)).to eq(0)
@@ -53,8 +62,13 @@ describe Supermarket do
   		expect(immutable.item_list).to match_array([item])
   	end
 
-
   end
 
+  describe Supermarket::Basket do 
+
+  	it 'is an inventory' do
+  		expect(subject).to be_a(Supermarket::Inventory)
+  	end
+  end
 
 end
