@@ -6,7 +6,7 @@ module Supermarket
 	class Till
 		
 		def checkout(basket)
-			basket.item_list.inject(0){|num, e| num += e.price; num}
+			basket.item_list.collect{|e|e.price}.reduce(0,:+)
 		end
 	end
 
@@ -15,7 +15,7 @@ module Supermarket
 
     def initialize(name:, price:)
       @name = name
-      @price = Integer(price)
+      @price = price
     end
 
   end
