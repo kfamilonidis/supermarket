@@ -1,19 +1,16 @@
 require "supermarket/version"
 
-
 module Supermarket
-
-	class Till
-		
+  class Till
     attr_reader :discount_list
 
     def initialize(discount_list=[])
       @discount_list = discount_list
     end
 
-		def checkout(basket)
-			basket.item_list.collect{|e|e.price}.reduce(0,:+)
-		end
+    def checkout(basket)
+      basket.item_list.collect{|e|e.price}.reduce(0,:+)
+    end
 
     def apply_discount(list)
       discounts = @discount_list.select{|e|e.applicable?(list)}
@@ -24,11 +21,10 @@ module Supermarket
       end
       list
     end
-
-	end
+  end
 
   class Item
-  	attr_reader :price, :name
+    attr_reader :price, :name
 
     def initialize(name:, price:)
       @name = name
@@ -38,31 +34,28 @@ module Supermarket
     def ==(other)
       self.name == other.name
     end
-
   end
 
   class Stocker
-
   end
 
   class Inventory
-  	attr_reader :item_list
+    attr_reader :item_list
 
-  	def initialize(context=nil,item=nil)
+    def initialize(context=nil,item=nil)
       @item_list = context ? context.item_list.dup << item : []
-  	end
+    end
 
-  	def add(item)
-  		self.class.new(self,item)
-  	end
+    def add(item)
+      self.class.new(self,item)
+    end
 
-  	def how_many?(item)
-  		@item_list.count{|e| e == item}
-  	end
+    def how_many?(item)
+      @item_list.count{|e| e == item}
+    end
   end
 
   class Basket < Inventory
-    
   end
 
   class Discount
@@ -79,13 +72,12 @@ module Supermarket
 
     def apply(item_list)
       if applicable?(item_list)
-        [@item.class.new(name: @item.name,price: @special_price)] + 
-          item_list.select{|e| e == @item }.drop(@quantity) + 
+        [@item.class.new(name: @item.name,price: @special_price)] +
+          item_list.select{|e| e == @item }.drop(@quantity) +
           item_list.reject{|e| e == @item }
       else
         item_list
       end
     end
-    
   end
 end

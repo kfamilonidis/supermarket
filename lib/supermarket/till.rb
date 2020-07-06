@@ -1,6 +1,4 @@
 module Supermarket
-
-	class Till
-		
-	end
+  class Till
+  end
 end
